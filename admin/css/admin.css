@@ -1,0 +1,126 @@
+/*
+ * Admin styles for Remove Duplicate Comments plugin
+ *
+ * This file contains admin styles for the Remove Duplicate Comments plugin.
+ */
+
+/* Backup Warning Styles */
+.rdc-backup-warning {
+    border: 2px solid #d63638;
+    border-left: 4px solid #d63638;
+    background: #fcf0f1;
+    padding: 12px 16px;
+    margin: 20px 0;
+    border-radius: 4px;
+}
+
+.rdc-backup-warning .dashicons {
+    color: #d63638;
+    font-size: 20px;
+    float: left;
+    margin-right: 8px;
+    line-height: 1.4;
+}
+
+.rdc-backup-warning strong {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: #50575e;
+}
+
+.rdc-backup-warning p {
+    margin: 0;
+    color: #50575e;
+    line-height: 1.6;
+}
+
+/* Form Styles */
+#rdc-duplicate-form label {
+    display: inline-block;
+    margin: 4px 0;
+    cursor: pointer;
+}
+
+#rdc-duplicate-form .submit {
+    margin-top: 20px;
+    position: relative;
+}
+
+#rdc-duplicate-form .spinner {
+    float: none;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 10px;
+}
+
+/* Progress Display Styles */
+#rdc-progress {
+    margin: 30px 0;
+    padding: 20px;
+    background: #f0f0f1;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+}
+
+#rdc-progress h2 {
+    margin: 0 0 15px 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.rdc-progress-stats {
+    margin-bottom: 20px;
+}
+
+.rdc-progress-stats p {
+    margin: 8px 0;
+    font-size: 14px;
+}
+
+.rdc-progress-stats span {
+    font-weight: bold;
+    color: #2271b1;
+    font-size: 16px;
+}
+
+/* Progress Bar Styles */
+.rdc-progress-bar {
+    width: 100%;
+    height: 30px;
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+}
+
+.rdc-progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: #2271b1;
+    transition: width 0.3s ease;
+    border-radius: 3px;
+}
+
+/* Results Display Styles */
+#rdc-results {
+    margin: 20px 0;
+}
+
+#rdc-results .notice {
+    margin: 10px 0;
+}
+
+/* Responsive Considerations */
+@media screen and (max-width: 782px) {
+    .rdc-backup-warning .dashicons {
+        float: none;
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    .rdc-progress-stats p {
+        font-size: 13px;
+    }
+}

@@ -1,0 +1,190 @@
+# Copyright (C) 2025 bitbit GmbH
+# This file is distributed under the same license as the Remove Duplicate Comments plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Remove Duplicate Comments 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/remove-duplicate-comments\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-10-30T12:42:57+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.4.0\n"
+"X-Domain: remove-duplicate-comments\n"
+
+#. Plugin Name of the plugin
+#: admin/admin-page.php:15
+#: admin/class-admin.php:60
+#: admin/class-admin.php:61
+msgid "Remove Duplicate Comments"
+msgstr ""
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+msgid "https://www.bitbit.de"
+msgstr ""
+
+#. Description of the plugin
+msgid "Findet und entfernt doppelte Kommentare basierend auf identischem Inhalt. Anfängerfreundlich mit Live-Fortschrittsanzeige."
+msgstr ""
+
+#. Author of the plugin
+msgid "bitbit GmbH"
+msgstr ""
+
+#: admin/admin-page.php:20
+msgid "Important: Backup Your Database!"
+msgstr ""
+
+#: admin/admin-page.php:21
+msgid "This action moves duplicate comments to the trash. Please backup your database before proceeding."
+msgstr ""
+
+#: admin/admin-page.php:27
+#: admin/admin-page.php:30
+msgid "Comment Status"
+msgstr ""
+
+#: admin/admin-page.php:31
+msgid "Approved"
+msgstr ""
+
+#: admin/admin-page.php:32
+msgid "Pending"
+msgstr ""
+
+#: admin/admin-page.php:33
+msgid "Spam"
+msgstr ""
+
+#: admin/admin-page.php:34
+msgid "Trash"
+msgstr ""
+
+#: admin/admin-page.php:36
+msgid "Select which comment statuses to check for duplicates."
+msgstr ""
+
+#: admin/admin-page.php:42
+msgid "Find & Move Duplicates to Trash"
+msgstr ""
+
+#: admin/admin-page.php:48
+msgid "Processing..."
+msgstr ""
+
+#: admin/admin-page.php:50
+msgid "Processed:"
+msgstr ""
+
+#: admin/admin-page.php:50
+msgid "comments"
+msgstr ""
+
+#: admin/admin-page.php:51
+msgid "Trashed:"
+msgstr ""
+
+#: admin/admin-page.php:51
+msgid "duplicates"
+msgstr ""
+
+#: admin/class-admin.php:99
+msgid "You do not have sufficient permissions to access this page."
+msgstr ""
+
+#: includes/class-ajax-handler.php:129
+msgid "Insufficient permissions."
+msgstr ""
+
+#: includes/class-ajax-handler.php:136
+msgid "No comment statuses selected."
+msgstr ""
+
+#: includes/class-ajax-handler.php:147
+#: includes/class-duplicate-finder.php:85
+msgid "Invalid comment statuses provided."
+msgstr ""
+
+#: includes/class-ajax-handler.php:166
+msgid "Processed %d comment"
+msgid_plural "Processed %d comments"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/class-ajax-handler.php:170
+msgid "moved %d duplicate to the trash"
+msgid_plural "moved %d duplicates to the trash"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/class-ajax-handler.php:188
+msgid "An unexpected error occurred."
+msgstr ""
+
+#: includes/class-duplicate-finder.php:96
+msgid "No valid comment statuses provided."
+msgstr ""
+
+#: includes/class-duplicate-finder.php:193
+msgid "Database error occurred while finding duplicate comments."
+msgstr ""
+
+#: remove-duplicate-comments.php:122
+msgid "This plugin requires WordPress 6.7 or higher."
+msgstr ""
+
+#: remove-duplicate-comments.php:129
+msgid "This plugin requires PHP 8.1 or higher."
+msgstr ""
+
+#: admin/js/ajax-handler.js:30
+#: admin/js/ajax-handler.js:211
+msgid "Error:"
+msgstr ""
+
+#: admin/js/ajax-handler.js:34
+msgid "Please select at least one comment status to check."
+msgstr ""
+
+#: admin/js/ajax-handler.js:105
+msgid "comment"
+msgid_plural "comments"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/js/ajax-handler.js:108
+msgid "duplicate"
+msgid_plural "duplicates"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/js/ajax-handler.js:123
+msgid "An error occurred during processing."
+msgstr ""
+
+#: admin/js/ajax-handler.js:133
+msgid "An unexpected error occurred. Please try again."
+msgstr ""
+
+#: admin/js/ajax-handler.js:158
+msgid "%d comment"
+msgid_plural "%d comments"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/js/ajax-handler.js:167
+msgid "%d duplicate"
+msgid_plural "%d duplicates"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/js/ajax-handler.js:176
+msgid "Processed %s and moved %s to the trash."
+msgstr ""
+
+#: admin/js/ajax-handler.js:182
+msgid "Success!"
+msgstr ""
