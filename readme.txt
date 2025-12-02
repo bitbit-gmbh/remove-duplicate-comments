@@ -31,10 +31,11 @@ Duplicate comments can accumulate in WordPress databases over time due to spam, 
 
 **How It Works**
 
-* Duplicates are identified by exact match of comment content
+* Duplicates are identified by exact match of comment content WITHIN THE SAME POST
 * The newest comment (highest comment_ID) is kept
 * Older duplicates are moved to the WordPress trash so you can restore or delete them later
 * Processing happens in batches for reliability
+* Duplicates are only detected when they occur on the same post/page
 
 == Installation ==
 
@@ -61,7 +62,7 @@ The plugin scans your selected comment statuses for duplicates based on identica
 
 = How does the plugin identify duplicates? =
 
-Comments are considered duplicates if they have exactly the same content (comment_content field). The comment author, date, or other metadata doesn't matter - only the text content is compared.
+Comments are considered duplicates if they have exactly the same content (comment_content field) AND appear on the same post. The comment author, date, or other metadata doesn't matter - only the text content and the post ID are compared. This ensures that the same comment text on different posts is NOT considered a duplicate.
 
 = Which comment is kept when duplicates are found? =
 

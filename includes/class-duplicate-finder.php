@@ -18,10 +18,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * RDC_Duplicate_Finder class.
  *
- * Finds duplicate comments based on identical comment content and moves
- * older entries to the trash.
+ * Finds duplicate comments based on identical comment content WITHIN THE SAME POST
+ * and moves older entries to the trash.
  * Uses batch processing to handle large datasets efficiently and provides
  * detailed progress tracking for AJAX operations.
+ *
+ * IMPORTANT: Duplicates are only identified when they occur on the same post.
  *
  * @since 1.0.0
  */
@@ -61,6 +63,9 @@ class RDC_Duplicate_Finder {
 	 * Main entry point for batch processing of duplicate comments.
 	 * Processes comments by status and removes duplicates while keeping
 	 * the newest comment in each duplicate group.
+	 *
+	 * IMPORTANT: Duplicates are only found and trashed when they occur
+	 * within the same post (comment_post_ID).
 	 *
 	 * @since 1.0.0
 	 * @param array $statuses   Array of comment status strings ('1', '0', 'spam', 'trash').
@@ -154,8 +159,11 @@ class RDC_Duplicate_Finder {
 	 * Get duplicate comment groups from database.
 	 *
 	 * Queries the WordPress comments table to find groups of comments
-	 * with identical content. Uses MD5 hash for efficient grouping and
-	 * prepared statements for security.
+	 * with identical content WITHIN THE SAME POST. Uses MD5 hash for
+	 * efficient grouping and prepared statements for security.
+	 *
+	 * Performance: Groups by comment_post_ID first to ensure duplicates
+	 * are only detected within the same post.
 	 *
 	 * @since 1.0.0
 	 * @param array $statuses   Array of comment status strings to filter by.
@@ -170,13 +178,15 @@ class RDC_Duplicate_Finder {
 		$status_placeholders = implode( ',', $status_placeholders );
 
 		// Construct SQL query with MD5 hash for efficient grouping
+		// CRITICAL: Group by comment_post_ID to only find duplicates WITHIN the same post
 		$query = "
 			SELECT
+				comment_post_ID,
 				comment_content,
 				COUNT(*) as duplicate_count
 			FROM {$wpdb->comments}
 			WHERE comment_approved IN ({$status_placeholders})
-			GROUP BY MD5(comment_content)
+			GROUP BY comment_post_ID, MD5(comment_content)
 			HAVING COUNT(*) > 1
 			LIMIT %d
 		";
@@ -208,14 +218,16 @@ class RDC_Duplicate_Finder {
 	/**
 	 * Move duplicate comments from a group to the trash, keeping the newest.
 	 *
-	 * Queries all comment IDs for the duplicate content and moves all but the
-	 * newest comment to the trash. Avoids GROUP_CONCAT limitations.
+	 * Queries all comment IDs for the duplicate content WITHIN THE SAME POST
+	 * and moves all but the newest comment to the trash. This ensures duplicates
+	 * are only identified when they appear on the same post.
 	 * Method name retained for backwards compatibility with earlier versions.
 	 *
 	 * @since 1.0.0
 	 * @param array $duplicate_group {
 	 *     Duplicate group data from database query.
 	 *
+	 *     @type int    $comment_post_ID Post ID for this duplicate group.
 	 *     @type string $comment_content Content of duplicate comments.
 	 *     @type string $duplicate_count Number of duplicates in group.
 	 * }
@@ -234,19 +246,27 @@ class RDC_Duplicate_Finder {
 			require_once ABSPATH . 'wp-admin/includes/comment.php';
 		}
 
-		// Query all comment IDs for this specific content and statuses
+		// Query all comment IDs for this specific content, statuses AND post ID
+		// CRITICAL: Filter by comment_post_ID to ensure duplicates are only within the same post
 		$query = "
 			SELECT comment_ID
 			FROM {$wpdb->comments}
-			WHERE comment_content = %s
+			WHERE comment_post_ID = %d
+			AND comment_content = %s
 			AND comment_approved IN ({$status_placeholders})
 			ORDER BY comment_ID DESC
 		";
 
-		// Prepare query with comment content and status values
+		// Prepare query with post ID, comment content and status values
 		$prepared_query = $wpdb->prepare(
 			$query,
-			array_merge( array( $duplicate_group['comment_content'] ), $statuses )
+			array_merge(
+				array(
+					intval( $duplicate_group['comment_post_ID'] ),
+					$duplicate_group['comment_content']
+				),
+				$statuses
+			)
 		);
 
 		// Get all comment IDs for this duplicate group
@@ -258,8 +278,8 @@ class RDC_Duplicate_Finder {
 			return 0;
 		}
 
-		// Ensure we have comments and verify content equality to avoid hash collisions
-		if ( empty( $comment_ids ) ) {
+		// Ensure we have comments
+		if ( empty( $comment_ids ) || count( $comment_ids ) < 2 ) {
 			return 0;
 		}
 
@@ -269,32 +289,21 @@ class RDC_Duplicate_Finder {
 		// Keep the first ID (newest comment) and trash the rest
 		array_shift( $comment_ids );
 
-		// Trash remaining duplicates with matching content
+		// Trash remaining duplicates - no need to verify content again since WHERE clause already filtered
 		$trashed_count = 0;
 		foreach ( $comment_ids as $comment_id ) {
-			// Verify content equality to prevent hash collision issues
-			$comment_content = $wpdb->get_var(
-				$wpdb->prepare(
-					"SELECT comment_content FROM {$wpdb->comments} WHERE comment_ID = %d",
-					$comment_id
-				)
-			);
+			$comment_status = wp_get_comment_status( $comment_id );
 
-			// Only move to trash if content actually matches (prevents MD5 collision issues)
-			if ( $comment_content === $duplicate_group['comment_content'] ) {
-				$comment_status = wp_get_comment_status( $comment_id );
+			// Skip if the comment is already in the trash
+			if ( 'trash' === $comment_status ) {
+				continue;
+			}
 
-				// Skip if the comment is already in the trash
-				if ( 'trash' === $comment_status ) {
-					continue;
-				}
+			$trash_result = wp_trash_comment( $comment_id );
 
-				$trash_result = wp_trash_comment( $comment_id );
-
-				if ( false !== $trash_result ) {
-					$trashed_count++;
-					$this->deleted_count++;
-				}
+			if ( false !== $trash_result ) {
+				$trashed_count++;
+				$this->deleted_count++;
 			}
 		}
 
